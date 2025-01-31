@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alexi\\Documents\\GitHub\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj": {}
+    "C:\\Users\\Jorge\\Desktop\\ACTIVIDADES\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alexi\\Documents\\GitHub\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj": {
+    "C:\\Users\\Jorge\\Desktop\\ACTIVIDADES\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alexi\\Documents\\GitHub\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj",
+        "projectUniqueName": "C:\\Users\\Jorge\\Desktop\\ACTIVIDADES\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj",
         "projectName": "PracticasPresencialesBack",
-        "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj",
-        "packagesPath": "C:\\Users\\alexi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alexi\\Documents\\GitHub\\PracticasPresencialesBack\\obj\\",
+        "projectPath": "C:\\Users\\Jorge\\Desktop\\ACTIVIDADES\\PracticasPresencialesBack\\PracticasPresencialesBack.csproj",
+        "packagesPath": "C:\\Users\\Jorge\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Jorge\\Desktop\\ACTIVIDADES\\PracticasPresencialesBack\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\alexi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Jorge\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -93,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.405/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
