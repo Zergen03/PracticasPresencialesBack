@@ -8,7 +8,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> USERS { get; set; }
     public DbSet<Category> CATEGORIES { get; set; }
     // public DbSet<Item> ITEMS { get; set; }
-    // public DbSet<Task> TASKS { get; set; }
+    public DbSet<ToDoTask> TASKS { get; set; }
     public DbSet<UserItems> USERITEMS { get; set; }
     public DbSet<Item> ITEMS { get; set; }
 
