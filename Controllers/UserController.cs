@@ -47,20 +47,20 @@ public class UsersController : ControllerBase
         }
     }
 
-    // // Endpoint para obtener un usuario por nombre
-    // [HttpGet("{name}")]
-    // public async Task<ActionResult<User>> GetUser(string name)
-    // {
-    //     try
-    //     {
-    //         var user = await _userService.GetUser(name);
-    //         return Ok(user);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    // }
+    // Endpoint para obtener un usuario por nombre
+    [HttpGet("byname/{name}")]
+    public async Task<ActionResult<User>> GetUserByName(string name)
+    {
+        try
+        {
+            var user = await _userService.GetUser(name);
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     // Endpoint para crear un usuario
     [HttpPost]
