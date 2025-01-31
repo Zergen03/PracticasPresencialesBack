@@ -1,26 +1,24 @@
 namespace ToDoApp.Models;
 
-public class Item{
+public class Items{
 
     public int Id { get; set; }
-    public string Type { get; set; }
-    public int Stats { get; set; }
-    public int Value { get; set; }
+    public string TypeObject { get; set; }
+    public int StatsObject { get; set; }
+    public int ValueObject { get; set; }
 
-    public Item(){
-    }
-
-    public Item(int id, string type, int stats, int value){
+    public Items(int id, string type, int stats, int value){
         Id = id;
-        Type = type;
-        Stats = stats;
-        Value = value; 
+        TypeObject = type;
+        StatsObject = stats;
+        ValueObject = value; 
     }
 
-    public Item(string type, int stats, int value){
-        Type = type;
-        Stats = stats;
-        Value = value; 
+    public Items(string type, int stats, int value){
+        TypeObject = type;
+        StatsObject = stats;
+        ValueObject = value; 
     }
 
+    public Items(){}
 }

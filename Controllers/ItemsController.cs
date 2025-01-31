@@ -1,53 +1,90 @@
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using ToDoApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Models;
+using ToDoApp.Services;
 
-// [Route("api/[controller]")]
-// [ApiController]
-// public class ItemsController : ControllerBase
-// {
-//     private readonly ApplicationDbContext _context;
+namespace ToDoApp.Controllers;
 
-//     public ItemsController(ItemsService service)
-//     {
-//         _service = service;
-//     }
+[ApiController]
+[Route("api/[controller]")]
+public class ItemsController : ControllerBase
+{
+    private readonly IItemsService _itemsService;
+    public ItemsController(IItemsService itemsService)
+    {
+        _itemsService = itemsService;
+    }
 
-//     [HttpGet]
-//     public async Task<IActionResult> GetItem(int itemId)
-//     {
-//         var item = await _context.GetItem()
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Items>>> GetItems()
+    {
+        try
+        {
+            var items = await _itemsService.GetAllItems();
+            return Ok(items);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-//         return Ok(users);
-//     }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Items>> GetItem(int id)
+    {
+        try
+        {
+            var item = await _itemsService.GetItemById(id);
+            return Ok(item);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-//     [HttpGet]
-//     public async Task<IActionResult> GetUsers()
-//     {
-//         return await _context.USERS.ToListAsync();
-//     }
+    [HttpPost]
+    public async Task<ActionResult<Items>> PostItem([FromBody] Items item)
+    {
+        try
+        {
+            await _itemsService.AddItem(item);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-//     // Endpoint para obtener un usuario por ID
-//     [HttpGet("{id}")]
-//     public async Task<ActionResult<User>> GetUser(int id)
-//     {
-//         var user = await _context.USERS.FindAsync(id);
+    [HttpPut]
+    public async Task<ActionResult<Items>> PutItem(int id, Items item)
+    {
+        if (id != item.Id)
+        {
+            return BadRequest("Item ID does not match");
+        }
+        try
+        {
+            var updatedItem = await _itemsService.UpdateItem(item);
+            return Ok(updatedItem);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-//         if (user == null)
-//         {
-//             return NotFound();
-//         }
-
-//         return user;
-//     }
-
-//     // Endpoint para crear un usuario
-//     [HttpPost]
-//     public async Task<ActionResult<User>> PostUser(User user)
-//     {
-//         _context.USERS.Add(user);
-//         await _context.SaveChangesAsync();
-
-//         return CreatedAtAction("GetUser", new { id = user.Id }, user);
-//     }
-// }
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteItem(int id)
+    {
+        try
+        {
+            await _itemsService.DeleteItem(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+}
