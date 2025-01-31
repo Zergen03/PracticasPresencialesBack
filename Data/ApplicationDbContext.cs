@@ -10,7 +10,7 @@ public class ApplicationDbContext : DbContext
     // public DbSet<Item> Items { get; set; }
     // public DbSet<Task> Tasks { get; set; }
     // public DbSet<UserItem> UserItems { get; set; }
-
+    public DbSet<Category> CATEGORIES {get; set;}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
