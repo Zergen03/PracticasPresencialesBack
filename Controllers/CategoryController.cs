@@ -1,79 +1,100 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoApp.Models;
+using ToDoApp.Services;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CategoriesController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly CategoryService _service;
 
-    public CategoriesController(ApplicationDbContext context)
+    public CategoriesController(CategoryService categoryService)
     {
-        _context = context;
+        _service = categoryService;
     }
 
-    // Endpoint para obtener todas las categorías
+    // Obtener todas las categorías
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    public async Task<ActionResult<IEnumerable<Category>>> GetAll()
     {
-        return await _context.CATEGORIES.ToListAsync();
+        try
+        {
+            var categories = await _service.GetAll();
+            return Ok(categories);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
     }
 
-    // Endpoint para obtener una categoría por ID
+    // Obtener una categoría por ID
     [HttpGet("{id}")]
-    public async Task<ActionResult<Category>> GetCategory(int id)
+    public async Task<ActionResult<Category>> GetById(int id)
     {
-        var category = await _context.CATEGORIES.FindAsync(id);
-
+        var category = await _service.GetById(id);
         if (category == null)
         {
             return NotFound();
         }
-
-        return category;
+        return Ok(category);
     }
 
-    // Endpoint para crear una categoría
-    [HttpPost]
-    public async Task<ActionResult<Category>> PostCategory(Category category)
+    // Obtener una categoría por nombre
+    [HttpGet("name/{name}")]
+    public async Task<ActionResult<Category>> GetByName(string name)
     {
-        _context.CATEGORIES.Add(category);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+        var category = await _service.GetByName(name);
+        if (category == null)
+        {
+            return NotFound();
+        }
+        return Ok(category);
     }
 
-    // Endpoint para actualizar una categoría
+    // Crear una nueva categoría
+    [HttpPost]
+    public async Task<ActionResult<Category>> Insert(Category category)
+    {
+        var id = await _service.Insert(category);
+        if (id == 0)
+        {
+            return BadRequest("No se pudo crear la categoría.");
+        }
+        return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+    }
+
+    // Actualizar una categoría por ID
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCategory(int id, Category category)
+    public async Task<IActionResult> Update(int id, Category category)
     {
         if (id != category.Id)
         {
-            return BadRequest();
+            return BadRequest("El ID proporcionado no coincide con la categoría.");
         }
 
-        _context.Entry(category).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var result = await _service.Update(id);
+        if (result == 0)
+        {
+            return NotFound();
+        }
 
         return NoContent();
     }
 
-    // Endpoint para eliminar una categoría
+    // Eliminar una categoría
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var category = await _context.CATEGORIES.FindAsync(id);
+        var category = await _service.GetById(id);
         if (category == null)
         {
             return NotFound();
         }
 
-        _context.CATEGORIES.Remove(category);
-        await _context.SaveChangesAsync();
-
+        await _service.Delete(category);
         return NoContent();
     }
 }

@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
     // public DbSet<Task> Tasks { get; set; }
     // public DbSet<UserItem> UserItems { get; set; }
     public DbSet<Category> CATEGORIES {get; set;}
+    public DbSet<Tasks> TASKS {get; set;}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
