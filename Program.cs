@@ -1,6 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ToDoApp.Models;
+using ToDoApp.Data;
+using ToDoApp.Services;
+using ToDoApp.DTOs;
+using ToDoApp.Controllers;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Configurar la conexión con MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -5,6 +5,8 @@ using ToDoApp.Models;
 using ToDoApp.Services;
 using ToDoApp.DTOs;
 
+namespace ToDoApp.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
@@ -45,20 +47,20 @@ public class UsersController : ControllerBase
         }
     }
 
-    // Endpoint para obtener un usuario por nombre
-    [HttpGet("{name}")]
-    public async Task<ActionResult<User>> GetUser(string name)
-    {
-        try
-        {
-            var user = await _userService.GetUser(name);
-            return Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    // // Endpoint para obtener un usuario por nombre
+    // [HttpGet("{name}")]
+    // public async Task<ActionResult<User>> GetUser(string name)
+    // {
+    //     try
+    //     {
+    //         var user = await _userService.GetUser(name);
+    //         return Ok(user);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest(ex.Message);
+    //     }
+    // }
 
     // Endpoint para crear un usuario
     [HttpPost]
