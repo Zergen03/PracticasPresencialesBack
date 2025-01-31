@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoApp.Models;
@@ -8,7 +7,6 @@ using ToDoApp.Models;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
 
     public UsersController(ApplicationDbContext context)
     {
