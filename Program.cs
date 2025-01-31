@@ -17,6 +17,8 @@ builder.Services.AddScoped<IUserItemsService, UserItemsService>();
 builder.Services.AddScoped<IUserItemsRepository, UserItemsRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IItemsService, ItemsService>();
+builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
 // Configurar la conexión con MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
