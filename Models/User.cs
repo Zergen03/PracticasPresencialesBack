@@ -1,5 +1,5 @@
-namespace Trabajo.Models;
-public class Users
+namespace ToDoApp.Models;
+public class User
 {
     // private static int _seed = 0;
     public int Id { get; set; }
@@ -8,9 +8,8 @@ public class Users
     public int Life { get; set; }
     public int Xp { get; set; }
     public int Gold { get; set; }
-    public int TaskId { get; set; }
 
-    public Users(int _id, string _name, string _password)
+    public User(int _id, string _name, string _password)
     {
         Id = _id;
         Name = _name;
@@ -21,7 +20,7 @@ public class Users
         // IncraseSeed();
     }
 
-    public Users(string _name, string _password)
+    public User(string _name, string _password)
     {
         Name = _name;
         Password = _password;
@@ -31,7 +30,7 @@ public class Users
         // IncraseSeed();
     }
 
-    public Users(){}
+    public User(){}
 
     // private static void IncraseSeed()
     // {
