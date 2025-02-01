@@ -41,11 +41,14 @@ public class TaskRepository : ITaskRepository
         try
         {
             _context.TASKS.Add(task);
+            Console.WriteLine(task.ToString());
             await _context.SaveChangesAsync();
             return task;
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error creating task: {ex.InnerException?.Message ?? ex.Message}");
+            Console.WriteLine($"Task Details: {task?.Id}, {task?.Name}, {task?.Description}, {task?.Category_Id}, {task?.ExpirationDate}");
             throw new Exception($"Error creating task: {ex.Message}");
         }
     }
