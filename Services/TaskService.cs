@@ -39,6 +39,31 @@ namespace ToDoApp.Services
                 throw new Exception($"Error getting task: {ex.Message}");
             }
         }
+        
+        public async Task<IEnumerable<ToDoTask>> GetTasksByCategory(int categoryId)
+        {
+            try
+            {
+                var tasksByCategory = new List<ToDoTask>();
+                var tasks =  await _taskRepository.GetTasks();
+                foreach (var task in tasks)
+                {
+                    if (task.Category_Id == categoryId)
+                    {
+                        tasksByCategory.Add(task);
+                    }
+                }
+                return tasksByCategory;
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException($"Invalid category ID: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting tasks: {ex.Message}");
+            }
+        }
 
         public async Task<ToDoTask> CreateTask(ToDoTask task)
         {

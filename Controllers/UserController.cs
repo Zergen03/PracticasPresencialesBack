@@ -62,6 +62,21 @@ public class UsersController : ControllerBase
         }
     }
 
+    // Endpoint para hacer login
+    [HttpPost("login")]
+    public async Task<ActionResult<User>> Login([FromBody] UserDTO user)
+    {
+        try
+        {
+            var loggedUser = await _userService.Login(user.Name, user.Password);
+            return Ok(loggedUser);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     // Endpoint para crear un usuario
     [HttpPost]
     public async Task<ActionResult<User>> PostUser([FromBody] UserDTO user)

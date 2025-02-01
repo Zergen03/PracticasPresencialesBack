@@ -57,6 +57,16 @@ namespace ToDoApp.Services
             }
         }
 
+        public async Task<User> Login(string _name, string _password)
+        {
+            User? user = await _userRepository.GetUser(_name);
+            if (user == null || user.Password != _password)
+            {
+                throw new System.Exception("User or password incorrect");
+            }
+            return user;
+        }
+
         public async Task<User> CreateUser(UserDTO user)
         {
             try

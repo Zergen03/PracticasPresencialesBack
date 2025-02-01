@@ -44,20 +44,20 @@ public class TaskController : ControllerBase
         }
     }
 
-    // Endpoint para obtener todas las tareas de un usuario
-    // [HttpGet("user/{userId}")]
-    // public async Task<ActionResult<IEnumerable<Task>>> GetTasksByUser(int userId)
-    // {
-    //     try
-    //     {
-    //         var tasks = await _taskService.GetTasksByUser(userId);
-    //         return Ok(tasks);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    // }
+    // Endpoint para obtener todas las tareas de una categoría
+    [HttpGet("category/{categoryId}")]
+    public async Task<ActionResult<IEnumerable<ToDoTask>>> GetTasksByCategory(int categoryId)
+    {
+        try
+        {
+            var tasks = await _taskService.GetTasksByCategory(categoryId);
+            return Ok(tasks);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     // Endpoint para crear una tarea
     [HttpPost]
