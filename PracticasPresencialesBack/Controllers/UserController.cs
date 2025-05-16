@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoApp.Models;
-using ToDoApp.Services;
-using ToDoApp.DTOs;
+using ToDoApp.Services.Interfaces;
+using ToDoApp.DTOs.Users;
 
 namespace ToDoApp.Controllers;
 
@@ -19,11 +19,11 @@ public class UsersController : ControllerBase
 
     // Endpoint para obtener todos los usuarios
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] string? name)
     {
         try
         {
-            var users = await _userService.GetUsers();
+            var users = await _userService.GetUsers(name);
             return Ok(users);
         }
         catch (Exception ex)
@@ -47,39 +47,22 @@ public class UsersController : ControllerBase
         }
     }
 
-    // Endpoint para obtener un usuario por nombre
-    [HttpGet("byname/{name}")]
-    public async Task<ActionResult<User>> GetUserByName(string name)
-    {
-        try
-        {
-            var user = await _userService.GetUser(name);
-            return Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
     // Endpoint para hacer login
     [HttpPost("login")]
-    public async Task<ActionResult<User>> Login([FromBody] UserDTO user)
+    public async Task<IActionResult> LoginUser([FromBody] LoginDTO loginUserDTO)
     {
-        try
+        var user = await _userService.Login(loginUserDTO);
+        if (user == null)
         {
-            var loggedUser = await _userService.Login(user.Name, user.Password);
-            return Ok(loggedUser);
+            return Unauthorized();
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var token = _userService.GenerateJWTToken(user);
+        return Ok(new { token });
     }
 
     // Endpoint para crear un usuario
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser([FromBody] UserDTO user)
+    public async Task<ActionResult<User>> PostUser([FromBody] CreateUserDTO user)
     {
         try
         {
@@ -94,15 +77,11 @@ public class UsersController : ControllerBase
 
     // Endpoint para actualizar un usuario
     [HttpPut("{id}")]
-    public async Task<ActionResult<User>> PutUser(int id, User user)
+    public async Task<ActionResult<User>> PutUser(int id, [FromBody]UpdateUserDTO user)
     {
-        if (id != user.Id)
-        {
-            return BadRequest();
-        }
         try
         {
-            await _userService.UpdateUser(user);
+            await _userService.UpdateUser(id, user);
             return Ok();
         }
         catch (Exception ex)

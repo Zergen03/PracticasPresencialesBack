@@ -1,18 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToDoApp.Models;
 public class User
 {
-    // private static int _seed = 0;
     [Key]
     public int Id { get; set; }
+    [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
     public string Password { get; set; }
     public int Life { get; set; }
     public int Xp { get; set; }
+    [NotMapped]
+    public int Lvl { get; set; }
     public int Gold { get; set; }
 
-    public User(int _id, string _name, string _password)
+    public User(int _id, string _name, string _password, int lvl)
     {
         Id = _id;
         Name = _name;
@@ -20,7 +23,7 @@ public class User
         Life = 10;
         Xp = 0;
         Gold = 0;
-        // IncraseSeed();
+        Lvl = lvl;
     }
 
     public User(string _name, string _password)
@@ -30,18 +33,13 @@ public class User
         Life = 10;
         Xp = 0;
         Gold = 0;
-        // IncraseSeed();
+        Lvl = 1;
     }
+    public User() { }
 
-    public User(){}
-
-    // private static void IncraseSeed()
-    // {
-    //     _seed++;
-    // }
 
     public override string ToString()
     {
-        return $"Name: {Name},\nLife: {Life},\nXp: {Xp},\nGold: {Gold}";
+        return $"Name: {Name},\nLife: {Life},\nXp: {Xp},\nGold: {Gold},\nLevel: {Lvl}";
     }
 };

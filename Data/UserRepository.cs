@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Models;
+using ToDoApp.Data.Interfaces;
 
 namespace ToDoApp.Data;
 
@@ -12,34 +13,28 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<User>> GetUsers()
+    public async Task<IEnumerable<User>> GetUsers(string? name)
     {
         try
         {
-            return await _context.USERS.ToListAsync();
+            var query = _context.USERS.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(u => u.Name.Contains(name)); 
+            }
+            return await query.ToListAsync();
         }
         catch (Exception ex)
         {
             throw new Exception($"Error getting users: {ex.Message}");
         }
     }
-    public async Task<User> GetUser(int id)
+
+    public async Task<User?> GetUser(int id)
     {
         try
         {
             return await _context.USERS.FindAsync(id);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error getting user: {ex.Message}");
-        }
-    }
-
-    public async Task<User> GetUser(string name)
-    {
-        try
-        {
-            return await _context.USERS.FirstOrDefaultAsync(u => u.Name == name);
         }
         catch (Exception ex)
         {
@@ -62,7 +57,7 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<User> UpdateUser(User user)
-    { 
+    {
         try
         {
             _context.USERS.Update(user);
@@ -80,8 +75,11 @@ public class UserRepository : IUserRepository
         try
         {
             var user = await _context.USERS.FindAsync(id);
-            _context.USERS.Remove(user);
-            await _context.SaveChangesAsync();
+            if (user != null)
+            {
+                _context.USERS.Remove(user);
+                await _context.SaveChangesAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -89,4 +87,8 @@ public class UserRepository : IUserRepository
         }
     }
 
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 }
