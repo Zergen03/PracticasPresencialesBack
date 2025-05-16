@@ -31,12 +31,14 @@ builder.Services.AddScoped<IItemsService, ItemsService>();
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
 // Configurar la conexión con MySQL
-builder.Services.AddDbContext<DBContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 32))
-    )
-);
+var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
+                       $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT")};" +
+                       $"Database={Environment.GetEnvironmentVariable("MYSQL_DB")};" +
+                       $"Uid={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
+                       $"Pwd={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};";
+
+builder.Services.AddDbContext<DbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

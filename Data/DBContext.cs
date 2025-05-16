@@ -4,6 +4,9 @@ using ToDoApp.Models;
 public class DBContext : DbContext
 {
     public DBContext(DbContextOptions<DBContext> options) : base(options) { }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    }
 
     public DbSet<User> USERS { get; set; }
     public DbSet<Category> CATEGORIES { get; set; }
@@ -12,8 +15,4 @@ public class DBContext : DbContext
     public DbSet<UserItems> USERITEMS { get; set; }
     public DbSet<Items> ITEMS { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-    }
 }
