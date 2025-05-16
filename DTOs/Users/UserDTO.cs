@@ -1,5 +1,5 @@
 
-namespace ToDoApp.DTOs;
+namespace ToDoApp.DTOs.Users;
 
 public record UserDTO
 {
