@@ -4,12 +4,12 @@ namespace ToDoApp.Data
 {
     public interface IUserItemsRepository
     {
-        Task<IEnumerable<UserItems>> GetUserItems();
-        Task<UserItems> GetUserItem(int id);
-        Task<IEnumerable<UserItems>> GetUserItems(int user_id);
-        Task<IEnumerable<UserItems>> GetItemsUser(int item_id);
-        Task<UserItems> CreateUserItem(UserItems userItem);
-        Task<UserItems> UpdateUserItem(UserItems userItem);
-        Task DeleteUserItem(int id);
+        Task<IEnumerable<UserItem>> GetUserItems();
+        Task<IEnumerable<UserItem>> GetUserItems(int userId, int itemId);
+        Task<UserItem> CreateUserItem(UserItem userItem);
+        Task<UserItem> UpdateUserItem(UserItem userItem);
+        Task DeleteUserItem(UserItem userItem);
+        Task SaveChangesAsync();
+
     }
 }

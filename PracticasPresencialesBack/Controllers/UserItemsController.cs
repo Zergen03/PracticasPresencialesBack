@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Models;
 using ToDoApp.Services;
+using ToDoApp.DTOs.UserItems;
 
 namespace ToDoApp.Controllers;
 
@@ -16,7 +17,7 @@ public class UserItemsController : ControllerBase
 
     // Endpoint para obtener todos los items de usuario
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserItems>>> GetUserItems()
+    public async Task<ActionResult<IEnumerable<UserItemDTO>>> GetUserItems()
     {
         try
         {
@@ -31,7 +32,7 @@ public class UserItemsController : ControllerBase
 
     // Endpoint para obtener todos los items de un usuario
     [HttpGet("{user_id}")]
-    public async Task<ActionResult<IEnumerable<UserItems>>> GetUserItems(int user_id)
+    public async Task<ActionResult<IEnumerable<UserItemDTO>>> GetUserItems(int user_id, int itemId)
     {
         try
         {

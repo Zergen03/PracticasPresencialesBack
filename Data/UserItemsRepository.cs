@@ -12,11 +12,14 @@ public class UserItemsRepository : IUserItemsRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems()
+    public async Task<IEnumerable<UserItem>> GetUserItems()
     {
         try
         {
-            return await _context.USERITEMS.ToListAsync();
+            return await _context.USERITEM
+                .Include(x => x.User)
+                .Include(x => x.Item)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -24,11 +27,16 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<UserItems> GetUserItem(int id)
+    public async Task<UserItem> GetUserItem(int userId, int itemId)
     {
         try
         {
-            return await _context.USERITEMS.FindAsync(id);
+            return await _context.USERITEM
+                .Include(x => x.User)
+                .Include(x => x.Item)
+                .FirstOrDefaultAsync(x => 
+                    x.UserId == userId &&
+                    x.ItemId == itemId);
         }
         catch (Exception ex)
         {
@@ -36,36 +44,20 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems(int user_id)
+    public async Task<UserItem> CreateUserItem(UserItem userItem)
     {
         try
         {
-            return await _context.USERITEMS.Where(x => x.User_Id == user_id).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error getting user items: {ex.Message}");
-        }
-    }
+            var exist = await _context.USERITEM
+                .AnyAsync(x =>
+                    x.UserId == userItem.UserId &&
+                    x.ItemId == userItem.ItemId);
+            if (exist)
+            {
+                throw new Exception("User item already exists");
+            }
 
-    public async Task<IEnumerable<UserItems>> GetItemsUser(int item_id)
-    {
-        try
-        {
-            return await _context.USERITEMS.Where(x => x.Item_Id == item_id).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error getting user items: {ex.Message}");
-        }
-    }
-
-    public async Task<UserItems> CreateUserItem(UserItems userItem)
-    {
-        try
-        {
-            _context.USERITEMS.Add(userItem);
-            await _context.SaveChangesAsync();
+            await _context.USERITEM.AddAsync(userItem);
             return userItem;
         }
         catch (Exception ex)
@@ -74,12 +66,11 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<UserItems> UpdateUserItem(UserItems userItem)
+    public async Task<UserItem> UpdateUserItem(UserItem userItem)
     {
         try
         {
             _context.Entry(userItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
             return userItem;
         }
         catch (Exception ex)
@@ -88,17 +79,21 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task DeleteUserItem(int id)
+    public async Task DeleteUserItem(UserItem userItem)
     {
         try
         {
-            var userItem = await _context.USERITEMS.FindAsync(id);
-            _context.USERITEMS.Remove(userItem);
-            await _context.SaveChangesAsync();
+            _context.USERITEM.Remove(userItem);
+            await Task.CompletedTask;
         }
         catch (Exception ex)
         {
             throw new Exception($"Error deleting user item: {ex.Message}");
         }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
     }
 }
