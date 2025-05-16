@@ -1,15 +1,16 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using ToDoApp.DTOs.Tasks;
 
 namespace ToDoApp.Services
 {
     public interface ITaskService
     {
-        Task<IEnumerable<ToDoTask>> GetTasks();
-        Task<ToDoTask> GetTask(int id);
-        Task<IEnumerable<ToDoTask>> GetTasksByCategory(int categoryId);
-        Task<ToDoTask> CreateTask(ToDoTask task);
-        Task<ToDoTask> UpdateTask(int id, ToDoTask task);
+        Task<IEnumerable<TaskDTO>> GetTasks();
+        Task<TaskDTO> GetTask(int id);
+        Task<IEnumerable<TaskDTO>> GetTasksByCategory(int categoryId);
+        Task<TaskDTO> CreateTask(CreateTaskDTO task);
+        Task<TaskDTO> UpdateTask(int id, UpdateTaskDTO task);
         Task DeleteTask(int id);
     }
 }

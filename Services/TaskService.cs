@@ -1,22 +1,28 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using AutoMapper;
+using ToDoApp.DTOs.Tasks;
 
 namespace ToDoApp.Services
 {
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
+        private readonly IMapper _mapper;
 
-        public TaskService(ITaskRepository taskRepository)
+        public TaskService(ITaskRepository taskRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _taskRepository = taskRepository;
         }
 
-        public async Task<IEnumerable<ToDoTask>> GetTasks()
+        public async Task<IEnumerable<TaskDTO>> GetTasks()
         {
             try
             {
-                return await _taskRepository.GetTasks();
+                var tasks = await _taskRepository.GetTasks();
+                var mappedTasks = _mapper.Map<IEnumerable<TaskDTO>>(tasks);
+                return mappedTasks;
             }
             catch (Exception ex)
             {
@@ -24,11 +30,13 @@ namespace ToDoApp.Services
             }
         }
 
-        public async Task<ToDoTask> GetTask(int id)
+        public async Task<TaskDTO> GetTask(int id)
         {
             try
             {
-                return await _taskRepository.GetTask(id);
+                var task = await _taskRepository.GetTask(id);
+                var mappedTask = _mapper.Map<TaskDTO>(task);
+                return mappedTask;
             }
             catch (ArgumentException ex)
             {
@@ -40,17 +48,17 @@ namespace ToDoApp.Services
             }
         }
         
-        public async Task<IEnumerable<ToDoTask>> GetTasksByCategory(int categoryId)
+        public async Task<IEnumerable<TaskDTO>> GetTasksByCategory(int categoryId)
         {
             try
             {
-                var tasksByCategory = new List<ToDoTask>();
+                var tasksByCategory = new List<TaskDTO>();
                 var tasks =  await _taskRepository.GetTasks();
                 foreach (var task in tasks)
                 {
                     if (task.Category_Id == categoryId)
                     {
-                        tasksByCategory.Add(task);
+                        tasksByCategory.Add(_mapper.Map<TaskDTO>(task));
                     }
                 }
                 return tasksByCategory;
@@ -65,11 +73,14 @@ namespace ToDoApp.Services
             }
         }
 
-        public async Task<ToDoTask> CreateTask(ToDoTask task)
+        public async Task<TaskDTO> CreateTask(CreateTaskDTO taskDTO)
         {
             try
             {
-                return await _taskRepository.CreateTask(task);
+                var mappedTask = _mapper.Map<ToDoTask>(taskDTO);
+                await _taskRepository.CreateTask(mappedTask);
+                await _taskRepository.SaveChangesAsync();
+                return _mapper.Map<TaskDTO>(mappedTask);
             }
             catch (ArgumentException ex)
             {
@@ -81,11 +92,15 @@ namespace ToDoApp.Services
             }
         }
 
-        public async Task<ToDoTask> UpdateTask(int id, ToDoTask task)
+        public async Task<TaskDTO> UpdateTask(int id, UpdateTaskDTO task)
         {
             try
             {
-                return await _taskRepository.UpdateTask(id, task);
+                var mappedTask = _mapper.Map<ToDoTask>(task);
+                mappedTask.Id = id;
+                await _taskRepository.UpdateTask(mappedTask);
+                await _taskRepository.SaveChangesAsync();
+                return _mapper.Map<TaskDTO>(mappedTask);
             }
             catch (ArgumentException ex)
             {

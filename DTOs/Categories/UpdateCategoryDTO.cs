@@ -11,4 +11,3 @@ public class UpdateCategoryDTO
     [Required(ErrorMessage = "El ID de usuario es obligatorio.")]
     public int User_Id { get; set; }
 }
-
