@@ -5,9 +5,9 @@ namespace ToDoApp.Data;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DBContext _context;
 
-    public CategoryRepository(ApplicationDbContext context)
+    public CategoryRepository(DBContext context)
     {
         _context = context;
     }

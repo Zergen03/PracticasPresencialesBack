@@ -5,9 +5,9 @@ namespace ToDoApp.Data;
 
 public class UserItemsRepository : IUserItemsRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DBContext _context;
 
-    public UserItemsRepository(ApplicationDbContext context)
+    public UserItemsRepository(DBContext context)
     {
         _context = context;
     }

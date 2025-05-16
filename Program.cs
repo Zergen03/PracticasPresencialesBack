@@ -31,7 +31,7 @@ builder.Services.AddScoped<IItemsService, ItemsService>();
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
 // Configurar la conexión con MySQL
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<DBContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 32))

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Models;
 
-public class ApplicationDbContext : DbContext
+public class DBContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
     public DbSet<User> USERS { get; set; }
     public DbSet<Category> CATEGORIES { get; set; }
