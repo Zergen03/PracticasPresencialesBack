@@ -2,6 +2,7 @@
 using ToDoApp.Models;
 using ToDoApp.DTOs.Categories;
 using ToDoApp.DTOs.Users;
+using ToDoApp.DTOs.Tasks;
 
 namespace ToDoApp.Mappings
 {
@@ -20,7 +21,7 @@ namespace ToDoApp.Services.Mappings
 {
     public class MappingProfile : Profile
     {
-       public MappingProfile()
+        public MappingProfile()
         {
             //Users
             CreateMap<User, UserDTO>().ReverseMap();
@@ -32,9 +33,20 @@ namespace ToDoApp.Services.Mappings
             CreateMap<User, UpdateUserDTO>().ReverseMap();
             CreateMap<User, LoginDTO>().ReverseMap();
 
+            //Categories
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<CreateCategoryDTO, Category>().ReverseMap();
+            CreateMap<UpdateCategoryDTO, Category>().ReverseMap();
+
+
+            //Tasks
+            CreateMap<ToDoTask, TaskDTO>().ReverseMap();
+            CreateMap<CreateTaskDTO, ToDoTask>().ReverseMap();
+            CreateMap<UpdateTaskDTO, ToDoTask>().ReverseMap();
         }
-    }
+    }    
 }
+    
 
 //namespace RefuApi.Services.Mappings
 //{

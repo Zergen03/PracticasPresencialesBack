@@ -50,7 +50,7 @@ public class TaskRepository : ITaskRepository
         }
     }
 
-    public async Task<ToDoTask> UpdateTask(int id, ToDoTask task)
+    public async Task<ToDoTask> UpdateTask(ToDoTask task)
     {
         try
         {
@@ -75,6 +75,17 @@ public class TaskRepository : ITaskRepository
         catch (Exception ex)
         {
             throw new Exception($"Error deleting task: {ex.Message}");
+        }
+    }
+    public async Task SaveChangesAsync()
+    {
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error saving changes: {ex.Message}");
         }
     }
 }
