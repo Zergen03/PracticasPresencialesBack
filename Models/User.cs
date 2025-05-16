@@ -15,6 +15,21 @@ public class User
     public int Lvl { get; set; }
     public int Gold { get; set; }
 
+    public string Role { get; set; }
+
+
+    public User(int _id, string _name, string _password, int lvl, string role)
+    {
+        Id = _id;
+        Name = _name;
+        Password = _password;
+        Life = 10;
+        Xp = 0;
+        Gold = 0;
+        Lvl = lvl;
+        Role = role;
+    }
+
     public User(int _id, string _name, string _password, int lvl)
     {
         Id = _id;

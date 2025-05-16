@@ -8,4 +8,5 @@ public record UserDTO
     public int Xp { get; set; } = default!;
     public int Gold { get; set; } = default!;
     public int Lvl { get; set; } = default!;
+    public string Role { get; set; } = default!;
 }

@@ -67,7 +67,7 @@ builder.Services.AddScoped<IUserItemsService, UserItemsService>();
 
 // ---------- JWT ----------
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
-                ?? throw new InvalidOperationException("JWT_SECRET no está definido");
+                ?? throw new InvalidOperationException("JWT_SECRET no estï¿½ definido");
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -117,7 +117,7 @@ builder.Services.AddCors(opts =>
 var app = builder.Build();
 
 // ---------- pipeline ----------
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

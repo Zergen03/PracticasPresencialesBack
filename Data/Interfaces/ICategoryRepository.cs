@@ -6,6 +6,7 @@ namespace ToDoApp.Data
     {
         Task<IEnumerable<Category>> GetCategories();
         Task<Category> GetCategory(int id);
+        Task<IEnumerable<Category>> GetCategoriesByUser(int userId);
         Task<Category> CreateCategory(Category category);
         Task<Category> UpdateCategory(Category category);
         Task DeleteCategory(int id);

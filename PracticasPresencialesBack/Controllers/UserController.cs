@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ToDoApp.DTOs.Users;
 using ToDoApp.Services.Interfaces;
 using ToDoApp.DTOs.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoApp.Controllers;
 
@@ -12,12 +13,16 @@ namespace ToDoApp.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
-    public UsersController(IUserService userService)
+    private readonly IUserService _authService;
+
+    public UsersController(IUserService userService, IUserService authService)
     {
+        _authService = authService;
         _userService = userService;
     }
 
     // Endpoint para obtener todos los usuarios
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers([FromQuery] string? name)
     {
@@ -33,6 +38,7 @@ public class UsersController : ControllerBase
     }
 
     // Endpoint para obtener un usuario por ID
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDTO>> GetUser(int id)
     {
@@ -76,6 +82,7 @@ public class UsersController : ControllerBase
     }
 
     // Endpoint para actualizar un usuario
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<UserDTO>> PutUser(int id, [FromBody]UpdateUserDTO user)
     {
@@ -91,6 +98,7 @@ public class UsersController : ControllerBase
     }
 
     // Endpoint para eliminar un usuario
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult<UserDTO>> DeleteUser(int id)
     {

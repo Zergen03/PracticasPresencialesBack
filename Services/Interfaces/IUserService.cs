@@ -1,5 +1,6 @@
 ﻿using ToDoApp.Models;
 using ToDoApp.DTOs.Users;
+using System.Security.Claims;
 
 namespace ToDoApp.Services.Interfaces;
 
@@ -12,5 +13,6 @@ public interface IUserService
     Task<UserDTO> UpdateUser(int id, UpdateUserDTO user);
     Task DeleteUser(int id);
     string GenerateJWTToken(UserDTO user);
+    bool HasAccessToResource(int userId, ClaimsPrincipal userClaims);
 
 }

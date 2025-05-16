@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Models;
 using ToDoApp.Services;
 using ToDoApp.DTOs.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using ToDoApp.Services.Interfaces;
 
 namespace ToDoApp.Controllers;
 
@@ -10,12 +12,15 @@ namespace ToDoApp.Controllers;
 public class TaskController : ControllerBase
 {
     private readonly ITaskService _taskService;
-    public TaskController(ITaskService taskService)
+    private readonly IUserService _authService;
+    public TaskController(ITaskService taskService, IUserService authService)
     {
+        _authService = authService;
         _taskService = taskService;
     }
 
     // Endpoint para obtener todas las tareas
+    [Authorize(Roles = "admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TaskDTO  >>> GetTasks()
     {
@@ -31,6 +36,7 @@ public class TaskController : ControllerBase
     }
 
     // Endpoint para obtener una tarea por ID
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskDTO>> GetTask(int id)
     {
@@ -46,6 +52,7 @@ public class TaskController : ControllerBase
     }
 
     // Endpoint para obtener todas las tareas de una categoría
+    [Authorize]
     [HttpGet("category/{categoryId}")]
     public async Task<ActionResult<IEnumerable<TaskDTO>>> GetTasksByCategory(int categoryId)
     {
@@ -61,6 +68,7 @@ public class TaskController : ControllerBase
     }
 
     // Endpoint para crear una tarea
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<TaskDTO>> CreateTask([FromBody] CreateTaskDTO task)
     {
@@ -76,6 +84,7 @@ public class TaskController : ControllerBase
     }
 
     // Endpoint para actualizar una tarea
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<TaskDTO>> UpdateTask(int id, [FromBody] UpdateTaskDTO task)
     {
@@ -91,6 +100,7 @@ public class TaskController : ControllerBase
     }
 
     // Endpoint para eliminar una tarea
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<ActionResult<TaskDTO>> DeleteTask(int id)
     {

@@ -36,6 +36,18 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
+    public async Task<IEnumerable<Category>> GetCategoriesByUser(int userId)
+    {
+        try
+        {
+            return await _context.CATEGORIES.Where(c => c.User_Id == userId).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error getting categories by user: {ex.Message}");
+        }
+    }
+
     public async Task<Category> CreateCategory(Category category)
     {
         try

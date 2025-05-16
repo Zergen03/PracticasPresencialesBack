@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Services;
 using ToDoApp.DTOs.Items;
+using Microsoft.AspNetCore.Authorization;
+using ToDoApp.Services.Interfaces;
 
 namespace ToDoApp.Controllers;
 
@@ -9,11 +11,14 @@ namespace ToDoApp.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IItemsService _itemsService;
-    public ItemsController(IItemsService itemsService)
+    private readonly IUserService _authService;
+    public ItemsController(IItemsService itemsService, IUserService authService)
     {
+        _authService = authService;
         _itemsService = itemsService;
     }
 
+    [Authorize (Roles = "admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems([FromQuery] string? name)
     {
@@ -28,6 +33,7 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<ItemDTO>> GetItem(int id)
     {
@@ -42,6 +48,7 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [Authorize (Roles = "admin")]
     [HttpPost]
     public async Task<ActionResult<ItemDTO>> PostItem([FromBody] CreateItemDTO item)
     {
@@ -56,6 +63,7 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [Authorize (Roles = "admin")]
     [HttpPut]
     public async Task<ActionResult<ItemDTO>> PutItem(int id, UpdateItemDTO item)
     {
@@ -70,6 +78,7 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [Authorize (Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult<ItemDTO>> DeleteItem(int id)
     {
