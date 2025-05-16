@@ -68,7 +68,8 @@ public class CategoryService : ICategoryService
         try
         {
             var mappedCategory = _mapper.Map<Category>(categoryDTO);
-            await _categoryRepository.UpdateCategory(id, mappedCategory);
+            mappedCategory.Id = id;
+            await _categoryRepository.UpdateCategory(mappedCategory);
             await _categoryRepository.SaveChangesAsync();
             return _mapper.Map<CategoryDTO>(mappedCategory);
         }

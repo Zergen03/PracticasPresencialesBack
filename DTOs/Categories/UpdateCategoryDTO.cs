@@ -4,9 +4,6 @@ namespace ToDoApp.DTOs.Categories;
 
 public class UpdateCategoryDTO
 {
-    [Required(ErrorMessage = "El ID de la categoría es obligatorio.")]
-    public int Id { get; set; }
-
     [Required(ErrorMessage = "El nombre es obligatorio.")]
     [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 50 caracteres.")]
     public string Name { get; set; }

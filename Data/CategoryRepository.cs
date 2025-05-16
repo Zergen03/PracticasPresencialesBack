@@ -50,7 +50,7 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<Category> UpdateCategory(int id, Category category)
+    public async Task<Category> UpdateCategory(Category category)
     {
         try
         {

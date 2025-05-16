@@ -5,25 +5,23 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using ToDoApp.Data;
+using ToDoApp.Data.Interfaces;
 using ToDoApp.Services;
+using ToDoApp.Services.Interfaces;
 
-Env.Load();                                   // 1) variables del .env
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------- Kestrel ----------
 builder.WebHost.ConfigureKestrel(o => o.ListenAnyIP(8080));
 
-// ---------- MVC ----------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// ---------- Swagger (DESPUÉS de AddControllers) ----------
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RefuApi", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Questify", Version = "v1" });
 
-    // Botón “Authorize” con JWT en Swagger
     var jwtScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -44,7 +42,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ---------- cadena de conexión MySQL ----------
 var connectionString =
     $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
     $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT")};" +
@@ -55,10 +52,8 @@ var connectionString =
 builder.Services.AddDbContext<QuestifyContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// ---------- AutoMapper ----------
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// ---------- Repositorios y servicios ----------
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

@@ -2,6 +2,7 @@ namespace ToDoApp.DTOs.Categories;
 
 public record CategoryDTO
 {
+    public int Id { get; set; }
     public int User_Id { get; set; }
     public string Name { get; set; } = default!;
 

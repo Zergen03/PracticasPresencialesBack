@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ToDoApp.Models;
 using ToDoApp.DTOs.Categories;
+using ToDoApp.DTOs.Users;
 
 namespace ToDoApp.Mappings
 {
@@ -11,6 +12,26 @@ namespace ToDoApp.Mappings
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CreateCategoryDTO, Category>().ReverseMap();
             CreateMap<UpdateCategoryDTO, Category>().ReverseMap();
+        }
+    }
+}
+
+namespace ToDoApp.Services.Mappings
+{
+    public class MappingProfile : Profile
+    {
+       public MappingProfile()
+        {
+            //Users
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<CreateUserDTO, User>()
+                .ForMember(d => d.Life, opt => opt.MapFrom(_ => 50))
+                .ForMember(d => d.Xp, opt => opt.MapFrom(_ => 0))
+                .ForMember(d => d.Gold, opt => opt.MapFrom(_ => 0))
+                .ForMember(d => d.Lvl, opt => opt.MapFrom(_ => 1));
+            CreateMap<User, UpdateUserDTO>().ReverseMap();
+            CreateMap<User, LoginDTO>().ReverseMap();
+
         }
     }
 }
