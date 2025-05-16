@@ -5,9 +5,9 @@ namespace ToDoApp.Data;
 
 public class UserRepository : IUserRepository
 {
-    private readonly DBContext _context;
+    private readonly QuestifyContext _context;
 
-    public UserRepository(DBContext context)
+    public UserRepository(QuestifyContext context)
     {
         _context = context;
     }

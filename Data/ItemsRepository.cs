@@ -5,9 +5,9 @@ namespace ToDoApp.Data;
 
 public class ItemsRepository : IItemsRepository
 {
-    private readonly DBContext _context;
+    private readonly QuestifyContext _context;
 
-    public ItemsRepository(DBContext context)
+    public ItemsRepository(QuestifyContext context)
     {
         _context = context;
     }

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Models;
 
-public class DBContext : DbContext
+public class QuestifyContext : DbContext
 {
-    public DBContext(DbContextOptions<DBContext> options) : base(options) { }
+    public QuestifyContext(DbContextOptions<QuestifyContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
     }

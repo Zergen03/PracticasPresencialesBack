@@ -5,9 +5,9 @@ namespace ToDoApp.Data;
 
 public class TaskRepository : ITaskRepository
 {
-    private readonly DBContext _context;
+    private readonly QuestifyContext _context;
 
-    public TaskRepository(DBContext context)
+    public TaskRepository(QuestifyContext context)
     {
         _context = context;
     }
