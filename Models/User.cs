@@ -14,6 +14,7 @@ public class User
     [NotMapped]
     public int Lvl { get; set; }
     public int Gold { get; set; }
+    public bool IsAdmin { get; set; } = false!;
 
     public User(int _id, string _name, string _password, int lvl)
     {

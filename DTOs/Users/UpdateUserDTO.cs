@@ -13,4 +13,5 @@ namespace ToDoApp.DTOs.Users;
         public int Xp { get; set; }
         public int Lvl { get; set; }
         public int Gold { get; set; }
-    }
+    public bool IsAdmin { get; set; } = false!;
+}

@@ -8,4 +8,5 @@ public record UserDTO
     public int Xp { get; set; } = default!;
     public int Gold { get; set; } = default!;
     public int Lvl { get; set; } = default!;
+    public bool IsAdmin { get; set; } = false!;
 }
