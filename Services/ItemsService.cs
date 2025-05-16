@@ -1,22 +1,29 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using ToDoApp.Data.Interfaces;
+using ToDoApp.DTOs.Items;
+using AutoMapper;
+
 
 namespace ToDoApp.Services;
 
 public class ItemsService : IItemsService
 {
     private readonly IItemsRepository _itemsRepository;
+    private readonly IMapper _mapper;
 
-    public ItemsService(IItemsRepository itemsRepository)
+    public ItemsService(IItemsRepository itemsRepository, IMapper mapper)
     {
         _itemsRepository = itemsRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Items>> GetAllItems()
+    public async Task<IEnumerable<ItemDTO>> GetAllItems(string? name)
     {
         try
         {
-            return await _itemsRepository.GetAllItems();
+            var items = await _itemsRepository.GetAllItems(name);
+            return _mapper.Map<IEnumerable<ItemDTO>>(items);
         }
         catch (Exception ex)
         {
@@ -24,10 +31,15 @@ public class ItemsService : IItemsService
         }
     }
 
-    public async Task<Items> GetItemById(int id)
+    public async Task<ItemDTO> GetItemById(int id)
     {
         try{
-            return await _itemsRepository.GetItemById(id);
+            var item = await _itemsRepository.GetItemById(id);
+            if (item == null)
+            {
+                throw new ArgumentException($"Item with ID {id} not found.");
+            }
+            return _mapper.Map<ItemDTO>(item);
         }
         catch (ArgumentException ex)
         {
@@ -39,11 +51,25 @@ public class ItemsService : IItemsService
         }
     }
 
-    public async Task<Items> AddItem(Items item)
+    public async Task<ItemDTO> AddItem(CreateItemDTO itemDTO)
     {
         try
         {
-            return await _itemsRepository.AddItem(item);
+            if (string.IsNullOrEmpty(itemDTO.Name) || string.IsNullOrEmpty(itemDTO.TypeObject))
+            {
+                throw new ArgumentException("Item name and type cannot be null or empty.");
+            }
+
+            var item = _mapper.Map<Items>(itemDTO);
+
+            var existingItem = await _itemsRepository.GetAllItems(itemDTO.Name);
+            if (existingItem.Any())
+            {
+                throw new ArgumentException($"Item with name {itemDTO.Name} already exists.");
+            }
+            await _itemsRepository.AddItem(item);
+            await _itemsRepository.SaveChangesAsync();
+            return _mapper.Map<ItemDTO>(item);
         }
         catch (ArgumentException ex)
         {
@@ -55,11 +81,20 @@ public class ItemsService : IItemsService
         }
     }
 
-    public async Task<Items> UpdateItem(Items item)
+    public async Task<ItemDTO> UpdateItem(int id, UpdateItemDTO itemDTO)
     {
         try
         {
-            return await _itemsRepository.UpdateItem(item);
+            var item = await _itemsRepository.GetItemById(id);
+            if (item == null)
+            {
+                throw new ArgumentException($"Item with ID {id} not found.");
+            }
+            _mapper.Map(itemDTO, item);
+            item.Id = id;
+            var result = await _itemsRepository.UpdateItem(item);
+            await _itemsRepository.SaveChangesAsync();
+            return _mapper.Map<ItemDTO>(result);
         }
         catch (ArgumentException ex)
         {

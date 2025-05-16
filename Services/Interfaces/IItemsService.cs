@@ -1,12 +1,13 @@
 using ToDoApp.Models;
+using ToDoApp.DTOs.Items;
 
 namespace ToDoApp.Services;
 
 public interface IItemsService
 {
-    Task<IEnumerable<Items>> GetAllItems();
-    Task<Items> GetItemById(int id);
-    Task<Items> AddItem(Items item);
-    Task<Items> UpdateItem(Items item);
+    Task<IEnumerable<ItemDTO>> GetAllItems(string? name);
+    Task<ItemDTO> GetItemById(int id);
+    Task<ItemDTO> AddItem(CreateItemDTO item);
+    Task<ItemDTO> UpdateItem(int id, UpdateItemDTO item);
     Task DeleteItem(int id);
 }

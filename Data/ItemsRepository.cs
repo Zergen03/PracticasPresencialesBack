@@ -12,7 +12,7 @@ public class ItemsRepository : IItemsRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Items>> GetAllItems()
+    public async Task<IEnumerable<Items>> GetAllItems(string? name)
     {
         try
         {
@@ -76,5 +76,10 @@ public class ItemsRepository : IItemsRepository
         {
             throw new Exception($"Error deleting item: {ex.Message}");
         }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
     }
 }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ToDoApp.Models;
+using ToDoApp.DTOs.Users;
 using ToDoApp.Services.Interfaces;
 using ToDoApp.DTOs.Users;
 
@@ -19,7 +19,7 @@ public class UsersController : ControllerBase
 
     // Endpoint para obtener todos los usuarios
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] string? name)
+    public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers([FromQuery] string? name)
     {
         try
         {
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
 
     // Endpoint para obtener un usuario por ID
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
+    public async Task<ActionResult<UserDTO>> GetUser(int id)
     {
         try
         {
@@ -62,7 +62,7 @@ public class UsersController : ControllerBase
 
     // Endpoint para crear un usuario
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser([FromBody] CreateUserDTO user)
+    public async Task<ActionResult<UserDTO>> PostUser([FromBody] CreateUserDTO user)
     {
         try
         {
@@ -77,7 +77,7 @@ public class UsersController : ControllerBase
 
     // Endpoint para actualizar un usuario
     [HttpPut("{id}")]
-    public async Task<ActionResult<User>> PutUser(int id, [FromBody]UpdateUserDTO user)
+    public async Task<ActionResult<UserDTO>> PutUser(int id, [FromBody]UpdateUserDTO user)
     {
         try
         {
@@ -92,7 +92,7 @@ public class UsersController : ControllerBase
 
     // Endpoint para eliminar un usuario
     [HttpDelete("{id}")]
-    public async Task<ActionResult<User>> DeleteUser(int id)
+    public async Task<ActionResult<UserDTO>> DeleteUser(int id)
     {
         try
         {

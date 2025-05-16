@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using ToDoApp.Models;
 using ToDoApp.Services;
+using ToDoApp.DTOs.Items;
 
 namespace ToDoApp.Controllers;
 
@@ -15,11 +15,11 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Items>>> GetItems()
+    public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems([FromQuery] string? name)
     {
         try
         {
-            var items = await _itemsService.GetAllItems();
+            var items = await _itemsService.GetAllItems(name);
             return Ok(items);
         }
         catch (Exception ex)
@@ -29,7 +29,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Items>> GetItem(int id)
+    public async Task<ActionResult<ItemDTO>> GetItem(int id)
     {
         try
         {
@@ -43,7 +43,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Items>> PostItem([FromBody] Items item)
+    public async Task<ActionResult<ItemDTO>> PostItem([FromBody] CreateItemDTO item)
     {
         try
         {
@@ -57,15 +57,11 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult<Items>> PutItem(int id, Items item)
+    public async Task<ActionResult<ItemDTO>> PutItem(int id, UpdateItemDTO item)
     {
-        if (id != item.Id)
-        {
-            return BadRequest("Item ID does not match");
-        }
         try
         {
-            var updatedItem = await _itemsService.UpdateItem(item);
+            var updatedItem = await _itemsService.UpdateItem(id, item);
             return Ok(updatedItem);
         }
         catch (Exception ex)
@@ -75,7 +71,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteItem(int id)
+    public async Task<ActionResult<ItemDTO>> DeleteItem(int id)
     {
         try
         {
