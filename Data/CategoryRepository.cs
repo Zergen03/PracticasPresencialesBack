@@ -77,4 +77,10 @@ public class CategoryRepository : ICategoryRepository
             throw new Exception($"Error deleting category: {ex.Message}");
         }
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
 }

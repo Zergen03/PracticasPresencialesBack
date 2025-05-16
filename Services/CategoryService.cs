@@ -1,22 +1,28 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using ToDoApp.DTOs.Categories;
+using AutoMapper;
 
 namespace ToDoApp.Services;
 
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IMapper _mapper;
 
-    public CategoryService(ICategoryRepository categoryRepository)
+    public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
     {
+        _mapper = mapper;
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<IEnumerable<Category>> GetCategories()
+    public async Task<IEnumerable<CategoryDTO>> GetCategories()
     {
         try
         {
-            return await _categoryRepository.GetCategories();
+            var categories = await _categoryRepository.GetCategories();
+            var mappedCategories = _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+            return mappedCategories;
         }
         catch (Exception ex)
         {
@@ -24,11 +30,13 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public async Task<Category> GetCategory(int id)
+    public async Task<CategoryDTO> GetCategory(int id)
     {
         try
         {
-            return await _categoryRepository.GetCategory(id);
+            var category = await _categoryRepository.GetCategory(id);
+            var mappedCategory = _mapper.Map<CategoryDTO>(category);
+            return mappedCategory;
         }
         catch (ArgumentException ex)
         {
@@ -39,12 +47,15 @@ public class CategoryService : ICategoryService
             throw new ArgumentException($"Error getting category: {ex.Message}");
         }
     }
-
-    public async Task<Category> CreateCategory(Category category)
+    public async Task<CategoryDTO> CreateCategory(CreateCategoryDTO categoryDTO)
     {
         try
         {
-            return await _categoryRepository.CreateCategory(category);
+            var mappedCategory = _mapper.Map<Category>(categoryDTO);
+            await _categoryRepository.CreateCategory(mappedCategory);
+            await _categoryRepository.SaveChangesAsync();
+            Console.WriteLine($"Category created: { _mapper.Map<CategoryDTO>(mappedCategory)}");
+            return _mapper.Map<CategoryDTO>(mappedCategory);
         }
         catch (Exception ex)
         {
@@ -52,11 +63,14 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public async Task<Category> UpdateCategory(int id, Category category)
+    public async Task<CategoryDTO> UpdateCategory(int id, UpdateCategoryDTO categoryDTO)
     {
         try
         {
-            return await _categoryRepository.UpdateCategory(id, category);
+            var mappedCategory = _mapper.Map<Category>(categoryDTO);
+            await _categoryRepository.UpdateCategory(id, mappedCategory);
+            await _categoryRepository.SaveChangesAsync();
+            return _mapper.Map<CategoryDTO>(mappedCategory);
         }
         catch (ArgumentException ex)
         {

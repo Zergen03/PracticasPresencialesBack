@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToDoApp.Models;
 using ToDoApp.Services;
-using ToDoApp.DTOs;
+using ToDoApp.DTOs.Users;
 
 namespace ToDoApp.Controllers;
 

@@ -1,5 +1,5 @@
 ﻿using ToDoApp.Models;
-using ToDoApp.DTOs;
+using ToDoApp.DTOs.Users;
 
 namespace ToDoApp.Services;
 

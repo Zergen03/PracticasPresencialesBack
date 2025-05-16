@@ -1,13 +1,14 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using ToDoApp.DTOs.Categories;
 
 namespace ToDoApp.Services;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<Category>> GetCategories();
-    Task<Category> GetCategory(int id);
-    Task<Category> CreateCategory(Category category);
-    Task<Category> UpdateCategory(int id, Category category);
+    Task<IEnumerable<CategoryDTO>> GetCategories();
+    Task<CategoryDTO> GetCategory(int id);
+    Task<CategoryDTO> CreateCategory(CreateCategoryDTO category);
+    Task<CategoryDTO> UpdateCategory(int id, UpdateCategoryDTO category);
     Task DeleteCategory(int id);
 }

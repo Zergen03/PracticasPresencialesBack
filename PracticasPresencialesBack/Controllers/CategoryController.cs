@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ToDoApp.DTOs.Categories;
 using ToDoApp.Models;
 using ToDoApp.Services;
 
@@ -16,7 +17,7 @@ public class CategoryController : ControllerBase
 
     // Endpoint para obtener todas las categorías
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategories()
     {
         try
         {
@@ -31,7 +32,7 @@ public class CategoryController : ControllerBase
 
     // Endpoint para obtener una categoría por ID
     [HttpGet("{id}")]
-    public async Task<ActionResult<Category>> GetCategory(int id)
+    public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
     {
         try
         {
@@ -46,12 +47,12 @@ public class CategoryController : ControllerBase
 
     // Endpoint para crear una categoría
     [HttpPost]
-    public async Task<ActionResult<Category>> PostCategory(Category category)
+    public async Task<ActionResult<CategoryDTO>> PostCategory(CreateCategoryDTO category)
     {
         try
         {
             var newCategory = await _categoryService.CreateCategory(category);
-            return CreatedAtAction("GetCategory", new { id = newCategory.Id }, newCategory);
+            return CreatedAtAction("GetCategory", new { id = newCategory.User_Id }, newCategory);
         }
         catch (Exception ex)
         {
@@ -61,7 +62,7 @@ public class CategoryController : ControllerBase
 
     // Endpoint para actualizar una categoría
     [HttpPut("{id}")]
-    public async Task<ActionResult<Category>> PutCategory(int id, Category category)
+    public async Task<ActionResult<CategoryDTO>> PutCategory(int id, UpdateCategoryDTO category)
     {
         try
         {

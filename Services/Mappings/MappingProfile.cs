@@ -1,9 +1,19 @@
 ﻿using AutoMapper;
 using ToDoApp.Models;
-using ToDoApp.DTOs.Users;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using ToDoApp.DTOs;
-using ToDoApp.Models;
+using ToDoApp.DTOs.Categories;
+
+namespace ToDoApp.Mappings
+{
+    public class CategoryProfile : Profile
+    {
+        public CategoryProfile()
+        {
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<CreateCategoryDTO, Category>().ReverseMap();
+            CreateMap<UpdateCategoryDTO, Category>().ReverseMap();
+        }
+    }
+}
 
 //namespace RefuApi.Services.Mappings
 //{
