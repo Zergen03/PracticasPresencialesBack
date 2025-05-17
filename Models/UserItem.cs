@@ -11,4 +11,8 @@ public class UserItem
         UserId = userId;
         ItemId = itemId;
     }
+
+    public UserItem()
+    {
+    }
 }

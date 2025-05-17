@@ -31,27 +31,12 @@ public class UserItemsController : ControllerBase
     }
 
     // Endpoint para obtener todos los items de un usuario
-    [HttpGet("{user_id}")]
-    public async Task<ActionResult<IEnumerable<UserItemDTO>>> GetUserItems(int user_id, int itemId)
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<IEnumerable<UserItemDTO>>> GetUserItem(int userId, [FromQuery] int? itemId)
     {
         try
         {
-            var userItems = await _userItemsService.GetUserItems(user_id);
-            return Ok(userItems);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    // Endpoint para obtener todos los usuarios de un item
-    [HttpGet("item/{item_id}")]
-    public async Task<ActionResult<IEnumerable<UserItems>>> GetItemsUser(int item_id)
-    {
-        try
-        {
-            var userItems = await _userItemsService.GetItemsUser(item_id);
+            var userItems = await _userItemsService.GetUserItem(userId, itemId);
             return Ok(userItems);
         }
         catch (Exception ex)
@@ -62,7 +47,7 @@ public class UserItemsController : ControllerBase
 
     // Endpoint para crear un item de usuario
     [HttpPost]
-    public async Task<ActionResult<UserItems>> PostUserItem(UserItems userItem)
+    public async Task<ActionResult<UserItemDTO>> PostUserItem(CreateUserItemDTO userItem)
     {
         try
         {
@@ -75,28 +60,13 @@ public class UserItemsController : ControllerBase
         }
     }
 
-    // Endpoint para actualizar un item de usuario
-    [HttpPut]
-    public async Task<ActionResult<UserItems>> PutUserItem(UserItems userItem)
-    {
-        try
-        {
-            var updatedUserItem = await _userItemsService.UpdateUserItem(userItem);
-            return Ok(updatedUserItem);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
     // Endpoint para eliminar un item de usuario
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteUserItem(int id)
+    [HttpDelete("{userId}")]
+    public async Task<ActionResult> DeleteUserItem(int userId, [FromQuery] int? itemId)
     {
         try
         {
-            await _userItemsService.DeleteUserItem(id);
+            await _userItemsService.DeleteUserItem(userId, itemId);
             return Ok();
         }
         catch (Exception ex)

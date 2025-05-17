@@ -12,5 +12,8 @@ namespace ToDoApp.DTOs.UserItems
         public string userName { get; set; } = default!;
         public int itemId { get; set; }
         public string itemName { get; set; } = default!;
+        public string itemType { get; set; } = default!;
+        public int itemStats { get; set; }
+        public int itemValue { get; set; }
     }
 }

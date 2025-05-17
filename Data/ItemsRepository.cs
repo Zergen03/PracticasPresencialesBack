@@ -16,7 +16,12 @@ public class ItemsRepository : IItemsRepository
     {
         try
         {
-            return await _context.ITEMS.ToListAsync();
+            var query = _context.ITEMS.AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(i => i.Name.Contains(name));
+            }
+            return await query.ToListAsync();
         }
         catch (Exception ex)
         {

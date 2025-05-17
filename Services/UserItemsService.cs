@@ -31,12 +31,12 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task<UserItemDTO> GetUserItem(int userId, int itemId)
+    public async Task<IEnumerable<UserItemDTO>> GetUserItem(int userId, int? itemId)
     {
         try
         {
-            var userItmes = await _userItemsRepository.GetUserItems(userId, itemId);
-            return _mapper.Map<UserItemDTO>(userItmes);
+            var userItmes = await _userItemsRepository.GetUserItem(userId, itemId);
+            return _mapper.Map<IEnumerable<UserItemDTO>>(userItmes);
         }
         catch (ArgumentException ex)
         {
@@ -52,7 +52,7 @@ public class UserItemsService : IUserItemsService
     {
         try
         {
-            var userItem = await _userItemsRepository.GetUserItems(user_id, itemId);
+            var userItem = await _userItemsRepository.GetUserItem(user_id, itemId);
             return _mapper.Map<IEnumerable<UserItemDTO>>(userItem);
         }
         catch (ArgumentException ex)
@@ -86,17 +86,16 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task DeleteUserItem(int userId, int itemId)
+    public async Task DeleteUserItem(int userId, int? itemId)
     {
         try
         {
-            var userItems = await _userItemsRepository.GetUserItems(userId, itemId);
-            var userItem = userItems.FirstOrDefault();
-            if (userItems == null)
+            var userItem = await _userItemsRepository.GetUserItem(userId, itemId);
+            if (userItem == null)
             {
                 throw new ArgumentException($"User item with ID {userId} not found");
             }
-            await _userItemsRepository.DeleteUserItem(userItem);
+            await _userItemsRepository.DeleteUserItem(userId, itemId);
             await _userItemsRepository.SaveChangesAsync();
         }
         catch (ArgumentException ex)

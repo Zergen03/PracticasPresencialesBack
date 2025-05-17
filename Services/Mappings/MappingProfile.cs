@@ -3,6 +3,7 @@ using ToDoApp.Models;
 using ToDoApp.DTOs.Categories;
 using ToDoApp.DTOs.Users;
 using ToDoApp.DTOs.Items;
+using ToDoApp.DTOs.UserItems;
 
 namespace ToDoApp.Mappings
 {
@@ -37,6 +38,15 @@ namespace ToDoApp.Services.Mappings
             CreateMap<Items, ItemDTO>().ReverseMap();
             CreateMap<CreateItemDTO, Items>().ReverseMap();
             CreateMap<UpdateItemDTO, Items>().ReverseMap();
+
+            //UserItems
+            CreateMap<UserItem, UserItemDTO>()
+                .ForMember(dest => dest.itemName, opt => opt.MapFrom(src => src.Item.Name))
+                .ForMember(dest => dest.userName, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.itemType, opt => opt.MapFrom(src => src.Item.TypeObject))
+                .ForMember(dest => dest.itemStats, opt => opt.MapFrom(src => src.Item.StatsObject))
+                .ForMember(dest => dest.itemValue, opt => opt.MapFrom(src => src.Item.ValueObject));
+            CreateMap<CreateUserItemDTO, UserItem>().ReverseMap();
         }
     }
 }
