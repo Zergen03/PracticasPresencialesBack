@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    env_file: .env
+    container_name: questify_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+    volumes:
+      - mysql_data_questify:/var/lib/mysql
+    networks:
+      - quest_net
+
+  migrations:
+    build:
+      context: .
+      dockerfile: dockerfile.migrations
+    depends_on:
+      - mysql
+    env_file: .env
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: 3306
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - quest_net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: questify_api
+    ports:
+      - "5213:5213"
+    depends_on:
+      - mysql
+      - migrations
+    env_file: .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: 3306
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      JWT_SECRET: ${JWT_SECRET}
+    networks:
+      - quest_net
+
+#   frontend:
+#     build:
+#       context: ../PracticasPresencialesFront/
+#       dockerfile: Dockerfile
+#     container_name: questify_front
+#     ports:
+#       - "8080:80"
+#     depends_on:
+#       - api
+#     networks:
+#       - quest_net
+
+
+volumes:
+  mysql_data_questify:
+
+networks:
+  quest_net:
+    driver: bridge

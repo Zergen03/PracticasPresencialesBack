@@ -9,7 +9,7 @@ using ToDoApp.Data.Interfaces;
 using ToDoApp.Services;
 using ToDoApp.Services.Interfaces;
 
-Env.Load();
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,5 +124,6 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.Urls.Add("http://0.0.0.0:5213");
 
 app.Run();
