@@ -9,6 +9,6 @@ public class CreateCategoryDTO
     public string Name { get; set; }
 
     [Required(ErrorMessage = "El ID de usuario es obligatorio.")]
-    public int User_Id { get; set; }
+    public int UserId { get; set; }
 }
 

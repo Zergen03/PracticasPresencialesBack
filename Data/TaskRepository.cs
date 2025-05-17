@@ -41,7 +41,6 @@ public class TaskRepository : ITaskRepository
         try
         {
             _context.TASKS.Add(task);
-            await _context.SaveChangesAsync();
             return task;
         }
         catch (Exception ex)

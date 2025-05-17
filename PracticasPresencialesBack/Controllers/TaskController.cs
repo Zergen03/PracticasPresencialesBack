@@ -22,7 +22,7 @@ public class TaskController : ControllerBase
     // Endpoint para obtener todas las tareas
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TaskDTO  >>> GetTasks()
+    public async Task<ActionResult<IEnumerable<TaskDTO>>> GetTasks()
     {
         try
         {

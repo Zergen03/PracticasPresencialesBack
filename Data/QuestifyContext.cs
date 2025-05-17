@@ -26,10 +26,23 @@ public class QuestifyContext : DbContext
         modelBuilder.Entity<Category>()
             .HasKey(c => c.Id);
 
-        modelBuilder.Entity<Category>()
-            .HasMany(c => c.Tasks)
-            .WithOne(t => t.Category)
-            .HasForeignKey(t => t.Category_Id)
+        modelBuilder.Entity<Category>(cfg =>
+        {
+            cfg.HasMany(c => c.Tasks)
+               .WithOne(t => t.Category)
+               .HasForeignKey(t => t.CategoryId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
+        modelBuilder.Entity<User>()
+            .HasKey(u => u.Id);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Categories)
+            .WithOne(c => c.User)
+            .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 

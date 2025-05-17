@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace ToDoApp.Models
 {
     [Table("TASKS")]
     public class ToDoTask
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -11,8 +13,9 @@ namespace ToDoApp.Models
         public int XpReward { get; set; }
         public DateTime ExpirationDate { get; set; }
         public int Difficulty { get; set; }
-        public int Category_Id { get; set; }
-        public Category Category { get; set; } = new Category();
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; } = default!;
 
         public ToDoTask(int id, string name, string description, DateTime expirationDate, int difficulty, int category_Id)
         {
@@ -23,7 +26,7 @@ namespace ToDoApp.Models
             XpReward = CalculateXp(difficulty);
             ExpirationDate = expirationDate;
             Difficulty = difficulty;
-            Category_Id = category_Id;
+            CategoryId = category_Id;
         }
 
         public ToDoTask(string name, string description, DateTime expirationDate, int difficulty, int category_Id)
@@ -34,7 +37,7 @@ namespace ToDoApp.Models
             XpReward = CalculateXp(difficulty);
             ExpirationDate = expirationDate;
             Difficulty = difficulty;
-            Category_Id = category_Id;
+            CategoryId = category_Id;
         }
 
         public ToDoTask(){}

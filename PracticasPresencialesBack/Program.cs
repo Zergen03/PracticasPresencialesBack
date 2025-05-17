@@ -13,7 +13,7 @@ Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(o => o.ListenAnyIP(8080));
+//builder.WebHost.ConfigureKestrel(o => o.ListenAnyIP(8080));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -65,7 +65,6 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IUserItemsRepository, UserItemsRepository>();
 builder.Services.AddScoped<IUserItemsService, UserItemsService>();
 
-// ---------- JWT ----------
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")
                 ?? throw new InvalidOperationException("JWT_SECRET no est� definido");
 
@@ -105,7 +104,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("VeteranOnly", p => p.RequireClaim("IsVeteran", "true"));
 });
 
-// ---------- CORS ----------
 builder.Services.AddCors(opts =>
 {
     opts.AddPolicy("AllowFrontend", p =>
@@ -116,7 +114,6 @@ builder.Services.AddCors(opts =>
 
 var app = builder.Build();
 
-// ---------- pipeline ----------
 //if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -9,7 +9,7 @@ public record TaskDTO
     public int XpReward { get; set; }
     public DateTime ExpirationDate { get; set; }
     public int Difficulty { get; set; }
-    public int Category_Id { get; set; }
+    public int CategoryId { get; set; }
 
     public TaskDTO() { }
 }

@@ -56,7 +56,7 @@ namespace ToDoApp.Services
                 var tasks =  await _taskRepository.GetTasks();
                 foreach (var task in tasks)
                 {
-                    if (task.Category_Id == categoryId)
+                    if (task.CategoryId == categoryId)
                     {
                         tasksByCategory.Add(_mapper.Map<TaskDTO>(task));
                     }

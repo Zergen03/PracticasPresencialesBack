@@ -80,7 +80,7 @@ public class CategoryController : ControllerBase
         try
         {
             var newCategory = await _categoryService.CreateCategory(category);
-            return CreatedAtAction("GetCategory", new { id = newCategory.User_Id }, newCategory);
+            return CreatedAtAction("GetCategory", new { id = newCategory.UserId }, newCategory);
         }
         catch (Exception ex)
         {
@@ -96,8 +96,8 @@ public class CategoryController : ControllerBase
         try
         {
             var getCategory = await _categoryService.GetCategory(id);
-            var userId = getCategory.User_Id;
-            var categoryReciever = category.User_Id;
+            var userId = getCategory.UserId;
+            var categoryReciever = category.UserId;
 
             if (!_authService.HasAccessToResource(userId, User))
                 return Forbid();
@@ -127,7 +127,7 @@ public class CategoryController : ControllerBase
         try
         {
             var category = await _categoryService.GetCategory(id);
-            var userId = category.User_Id;
+            var userId = category.UserId;
 
             if (!_authService.HasAccessToResource(userId, User))
                 return Forbid();

@@ -40,7 +40,7 @@ public class CategoryRepository : ICategoryRepository
     {
         try
         {
-            return await _context.CATEGORIES.Where(c => c.User_Id == userId).ToListAsync();
+            return await _context.CATEGORIES.Where(c => c.UserId == userId).ToListAsync();
         }
         catch (Exception ex)
         {

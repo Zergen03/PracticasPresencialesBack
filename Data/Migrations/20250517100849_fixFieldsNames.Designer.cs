@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(QuestifyContext))]
-    partial class QuestifyContextModelSnapshot : ModelSnapshot
+    [Migration("20250517100849_fixFieldsNames")]
+    partial class fixFieldsNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +40,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CATEGORIES");
                 });
@@ -157,17 +158,6 @@ namespace Data.Migrations
                     b.ToTable("USERITEM");
                 });
 
-            modelBuilder.Entity("ToDoApp.Models.Category", b =>
-                {
-                    b.HasOne("ToDoApp.Models.User", "User")
-                        .WithMany("Categories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ToDoApp.Models.ToDoTask", b =>
                 {
                     b.HasOne("ToDoApp.Models.Category", "Category")
@@ -210,8 +200,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("ToDoApp.Models.User", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("UserItem");
                 });
 #pragma warning restore 612, 618

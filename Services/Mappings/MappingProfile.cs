@@ -43,7 +43,11 @@ namespace ToDoApp.Services.Mappings
 
             //Tasks
             CreateMap<ToDoTask, TaskDTO>().ReverseMap();
-            CreateMap<CreateTaskDTO, ToDoTask>().ReverseMap();
+            CreateMap<CreateTaskDTO, ToDoTask>()
+                .ForMember(d => d.CategoryId, o => o.MapFrom(s => s.CategoryId))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name.Trim()))
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Description))
+                .ForMember(d => d.Category, o => o.Ignore());
             CreateMap<UpdateTaskDTO, ToDoTask>().ReverseMap();
 
             //Items

@@ -22,7 +22,7 @@ public class UpdateTaskDTO
 
     [Required(ErrorMessage = "El ID de la categoría es obligatorio.")]
     [Range(1, int.MaxValue, ErrorMessage = "El ID de la categoría debe ser un número positivo.")]
-    public int Category_Id { get; set; }
+    public int CategoryId { get; set; }
 
     public UpdateTaskDTO() { }
 }
