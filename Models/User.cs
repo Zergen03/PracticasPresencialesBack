@@ -14,6 +14,7 @@ public class User
     [NotMapped]
     public int Lvl { get; set; }
     public int Gold { get; set; }
+    public ICollection<UserItem> UserItem { get; set; } = new List<UserItem>();
 
     public string Role { get; set; }
 

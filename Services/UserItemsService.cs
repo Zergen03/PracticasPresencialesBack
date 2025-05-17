@@ -1,22 +1,29 @@
 using ToDoApp.Models;
 using ToDoApp.Data;
+using ToDoApp.DTOs.UserItems;
+using AutoMapper;
+
 
 namespace ToDoApp.Services;
 
 public class UserItemsService : IUserItemsService
 {
     private readonly IUserItemsRepository _userItemsRepository;
+    private readonly IMapper _mapper;
 
-    public UserItemsService(IUserItemsRepository userItemsRepository)
+    public UserItemsService(IUserItemsRepository userItemsRepository, IMapper mapper)
     {
         _userItemsRepository = userItemsRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems()
+    public async Task<IEnumerable<UserItemDTO>> GetUserItems()
     {
         try
         {
-            return await _userItemsRepository.GetUserItems();
+            var userItems = await _userItemsRepository.GetUserItems();
+            return _mapper.Map<IEnumerable<UserItemDTO>>(userItems);
+            
         }
         catch (Exception ex)
         {
@@ -24,11 +31,12 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task<UserItems> GetUserItem(int id)
+    public async Task<IEnumerable<UserItemDTO>> GetUserItem(int userId, int? itemId)
     {
         try
         {
-            return await _userItemsRepository.GetUserItem(id);
+            var userItmes = await _userItemsRepository.GetUserItem(userId, itemId);
+            return _mapper.Map<IEnumerable<UserItemDTO>>(userItmes);
         }
         catch (ArgumentException ex)
         {
@@ -40,11 +48,12 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems(int user_id)
+    public async Task<IEnumerable<UserItemDTO>> GetUserItems(int user_id, int itemId)
     {
         try
         {
-            return await _userItemsRepository.GetUserItems(user_id);
+            var userItem = await _userItemsRepository.GetUserItem(user_id, itemId);
+            return _mapper.Map<IEnumerable<UserItemDTO>>(userItem);
         }
         catch (ArgumentException ex)
         {
@@ -56,27 +65,20 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task<IEnumerable<UserItems>> GetItemsUser(int item_id)
+    public async Task<UserItemDTO> CreateUserItem(CreateUserItemDTO dto
+        )
     {
         try
         {
-            return await _userItemsRepository.GetItemsUser(item_id);
-        }
-        catch (ArgumentException ex)
-        {
-            throw new ArgumentException($"Invalid item ID: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new ArgumentException($"Error getting user items: {ex.Message}");
-        }
-    }
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), "User item cannot be null");
+            }
 
-    public async Task<UserItems> CreateUserItem(UserItems userItem)
-    {
-        try
-        {
-            return await _userItemsRepository.CreateUserItem(userItem);
+            var userItem = _mapper.Map<UserItem>(dto);
+            await _userItemsRepository.CreateUserItem(userItem);
+            await _userItemsRepository.SaveChangesAsync();
+            return _mapper.Map<UserItemDTO>(userItem);
         }
         catch (Exception ex)
         {
@@ -84,23 +86,17 @@ public class UserItemsService : IUserItemsService
         }
     }
 
-    public async Task<UserItems> UpdateUserItem(UserItems userItem)
+    public async Task DeleteUserItem(int userId, int? itemId)
     {
         try
         {
-            return await _userItemsRepository.UpdateUserItem(userItem);
-        }
-        catch (Exception ex)
-        {
-            throw new ArgumentException($"Error updating user item: {ex.Message}");
-        }
-    }
-
-    public async Task DeleteUserItem(int id)
-    {
-        try
-        {
-            await _userItemsRepository.DeleteUserItem(id);
+            var userItem = await _userItemsRepository.GetUserItem(userId, itemId);
+            if (userItem == null)
+            {
+                throw new ArgumentException($"User item with ID {userId} not found");
+            }
+            await _userItemsRepository.DeleteUserItem(userId, itemId);
+            await _userItemsRepository.SaveChangesAsync();
         }
         catch (ArgumentException ex)
         {

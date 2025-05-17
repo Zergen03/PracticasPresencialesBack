@@ -13,6 +13,7 @@ public class Items{
     public required int StatsObject { get; set; }
     [Required]
     public required int ValueObject { get; set; }
+    public ICollection<UserItem> UserItem { get; set; } = new List<UserItem>();
 
     public Items(int id, string type, int stats, int value){
         Id = id;
@@ -28,4 +29,9 @@ public class Items{
     }
 
     public Items(){}
+
+    public bool Any()
+    {
+        throw new NotImplementedException();
+    }
 }

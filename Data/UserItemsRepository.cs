@@ -12,11 +12,14 @@ public class UserItemsRepository : IUserItemsRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems()
+    public async Task<IEnumerable<UserItem>> GetUserItems()
     {
         try
         {
-            return await _context.USERITEMS.ToListAsync();
+            return await _context.USERITEM
+                .Include(x => x.User)
+                .Include(x => x.Item)
+                .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -24,11 +27,20 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<UserItems> GetUserItem(int id)
+    public async Task<IEnumerable<UserItem>> GetUserItem(int userId, int? itemId = null)
     {
         try
         {
-            return await _context.USERITEMS.FindAsync(id);
+            IQueryable<UserItem> query = _context.USERITEM
+                .Include(ui => ui.User)
+                .Include(ui => ui.Item)
+                .Where(ui => ui.UserId == userId);
+
+            if (itemId.HasValue)
+            {
+                query = query.Where(ui => ui.ItemId == itemId.Value);
+            }
+            return await query.ToListAsync();
         }
         catch (Exception ex)
         {
@@ -36,36 +48,21 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<IEnumerable<UserItems>> GetUserItems(int user_id)
-    {
-        try
-        {
-            return await _context.USERITEMS.Where(x => x.User_Id == user_id).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error getting user items: {ex.Message}");
-        }
-    }
 
-    public async Task<IEnumerable<UserItems>> GetItemsUser(int item_id)
+    public async Task<UserItem> CreateUserItem(UserItem userItem)
     {
         try
         {
-            return await _context.USERITEMS.Where(x => x.Item_Id == item_id).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error getting user items: {ex.Message}");
-        }
-    }
+            var exist = await _context.USERITEM
+                .AnyAsync(x =>
+                    x.UserId == userItem.UserId &&
+                    x.ItemId == userItem.ItemId);
+            if (exist)
+            {
+                throw new Exception("User item already exists");
+            }
 
-    public async Task<UserItems> CreateUserItem(UserItems userItem)
-    {
-        try
-        {
-            _context.USERITEMS.Add(userItem);
-            await _context.SaveChangesAsync();
+            await _context.USERITEM.AddAsync(userItem);
             return userItem;
         }
         catch (Exception ex)
@@ -74,31 +71,35 @@ public class UserItemsRepository : IUserItemsRepository
         }
     }
 
-    public async Task<UserItems> UpdateUserItem(UserItems userItem)
+    public async Task DeleteUserItem(int userId, int? itemId)
     {
         try
         {
-            _context.Entry(userItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return userItem;
+            IQueryable<UserItem> query = _context.USERITEM.Where(ui => ui.UserId == userId);
+
+            if (itemId.HasValue)
+            {
+                query = query.Where(ui => ui.ItemId == itemId.Value);
+            }
+
+            List<UserItem> itemsToDelete = await query.ToListAsync();
+
+            if (itemsToDelete.Count == 0)
+            {
+                return;
+            }
+
+            _context.USERITEM.RemoveRange(itemsToDelete);
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error updating user item: {ex.Message}");
+            throw new Exception($"Error deleting user item(s): {ex.Message}", ex);
         }
     }
 
-    public async Task DeleteUserItem(int id)
+
+    public async Task SaveChangesAsync()
     {
-        try
-        {
-            var userItem = await _context.USERITEMS.FindAsync(id);
-            _context.USERITEMS.Remove(userItem);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error deleting user item: {ex.Message}");
-        }
+        await _context.SaveChangesAsync();
     }
 }

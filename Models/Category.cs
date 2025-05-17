@@ -5,6 +5,7 @@ namespace ToDoApp.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int User_Id { get; set; }
+        public ICollection<ToDoTask> Tasks { get; set; } = new List<ToDoTask>();
         public Category() { }
 
         public Category(string name, int user_Id)

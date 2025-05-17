@@ -12,7 +12,7 @@ namespace ToDoApp.Models
         public DateTime ExpirationDate { get; set; }
         public int Difficulty { get; set; }
         public int Category_Id { get; set; }
-
+        public Category Category { get; set; } = new Category();
 
         public ToDoTask(int id, string name, string description, DateTime expirationDate, int difficulty, int category_Id)
         {

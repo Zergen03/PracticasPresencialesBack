@@ -16,7 +16,12 @@ public class ItemsRepository : IItemsRepository
     {
         try
         {
-            return await _context.ITEMS.ToListAsync();
+            var query = _context.ITEMS.AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(i => i.Name.Contains(name));
+            }
+            return await query.ToListAsync();
         }
         catch (Exception ex)
         {
@@ -40,8 +45,7 @@ public class ItemsRepository : IItemsRepository
     {
         try
         {
-            _context.ITEMS.Add(item);
-            await _context.SaveChangesAsync();
+            await _context.ITEMS.AddAsync(item);
             return item;
         }
         catch (Exception ex)
@@ -50,13 +54,12 @@ public class ItemsRepository : IItemsRepository
         }
     }
 
-    public async Task<Items> UpdateItem(Items item)
+    public async Task<Items?> UpdateItem(Items item)
     {
         try
         {
-            _context.Update(item);
-            await _context.SaveChangesAsync();
-            return item;
+            _context.Entry(item).State = EntityState.Modified;
+            return item; 
         }
         catch (Exception ex)
         {
